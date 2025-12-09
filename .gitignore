@@ -1,12 +1,24 @@
 # R specific
 .Rhistory
-.RData
 .Rproj.user
 *.Rproj
 
-# Output files (optional - comment out if you want to track these)
-# output/
-# data/
+# RStudio files
+.Rproj.user/
+
+# Generated output files
+output/*.RData
+output/*.csv
+output/plots/*.png
+output/models/*.RData
+output/models/*.csv
+
+# But keep README files and .gitkeep
+!output/README.md
+!*/.gitkeep
+
+# Generated data files (keep structure but not generated CSVs)
+data/*.csv
 
 # System files
 .DS_Store
@@ -16,9 +28,6 @@ Thumbs.db
 *.tmp
 *.log
 *~
-
-# RStudio files
-.Rproj.user/
 
 # Package files
 *.tar.gz
