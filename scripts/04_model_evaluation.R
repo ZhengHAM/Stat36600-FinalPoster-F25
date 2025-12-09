@@ -128,13 +128,13 @@ if ("random_forest" %in% names(models)) {
 best_model_idx <- which.min(performance_df$RMSE)
 best_model_name <- performance_df$Model[best_model_idx]
 
-cat("\n" , "="*60, "\n", sep="")
+cat("\n" , strrep("=", 60), "\n", sep="")
 cat("BEST MODEL:", best_model_name, "\n")
-cat("="*60, "\n", sep="")
+cat(strrep("=", 60), "\n", sep="")
 cat("RMSE:      ", performance_df$RMSE[best_model_idx], "\n")
 cat("MAE:       ", performance_df$MAE[best_model_idx], "\n")
 cat("R-squared: ", performance_df$R_squared[best_model_idx], "\n")
-cat("="*60, "\n", sep="")
+cat(strrep("=", 60), "\n", sep="")
 
 # Save best model info
 best_model_info <- performance_df[best_model_idx, ]

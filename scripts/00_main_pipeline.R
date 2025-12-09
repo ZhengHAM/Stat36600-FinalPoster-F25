@@ -1,9 +1,9 @@
 # Main Analysis Pipeline
 # This script runs the complete data analysis and prediction modeling workflow
 
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 cat("DATA ANALYSIS AND PREDICTION MODELING PROJECT\n")
-cat("="*80, "\n\n", sep="")
+cat(strrep("=", 80), "\n\n", sep="")
 
 # Check and install required packages if necessary
 required_packages <- c("tidyverse", "caret", "corrplot", "randomForest", "glmnet", "gridExtra")
@@ -29,33 +29,33 @@ dir.create("output/plots", recursive = TRUE, showWarnings = FALSE)
 dir.create("output/models", recursive = TRUE, showWarnings = FALSE)
 
 cat("\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 cat("STEP 1: DATA PREPROCESSING\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 source("scripts/01_data_preprocessing.R")
 
 cat("\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 cat("STEP 2: EXPLORATORY DATA ANALYSIS\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 source("scripts/02_exploratory_analysis.R")
 
 cat("\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 cat("STEP 3: PREDICTION MODELS\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 source("scripts/03_prediction_models.R")
 
 cat("\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 cat("STEP 4: MODEL EVALUATION\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 source("scripts/04_model_evaluation.R")
 
 cat("\n")
-cat("="*80, "\n", sep="")
+cat(strrep("=", 80), "\n", sep="")
 cat("PIPELINE COMPLETED SUCCESSFULLY!\n")
-cat("="*80, "\n\n", sep="")
+cat(strrep("=", 80), "\n\n", sep="")
 
 cat("Results Summary:\n")
 cat("- Preprocessed data: data/\n")
