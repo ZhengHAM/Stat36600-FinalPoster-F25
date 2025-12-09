@@ -1,0 +1,34 @@
+# R specific
+.Rhistory
+.Rproj.user
+*.Rproj
+
+# RStudio files
+.Rproj.user/
+
+# Generated output files
+output/*.RData
+output/*.csv
+output/plots/*.png
+output/models/*.RData
+output/models/*.csv
+
+# But keep README files and .gitkeep
+!output/README.md
+!*/.gitkeep
+
+# Generated data files (keep structure but not generated CSVs)
+data/*.csv
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*~
+
+# Package files
+*.tar.gz
+*.zip

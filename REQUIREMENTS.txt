@@ -1,0 +1,23 @@
+# R Package Requirements for Data Analysis and Prediction Modeling Project
+
+# Core packages
+tidyverse >= 1.3.0      # Data manipulation and visualization (includes dplyr, ggplot2, tidyr, etc.)
+caret >= 6.0-90         # Machine learning framework and cross-validation
+
+# Visualization
+corrplot >= 0.92        # Correlation matrix visualization
+gridExtra >= 2.3        # Arranging multiple plots
+
+# Machine Learning Algorithms
+randomForest >= 4.7-1   # Random Forest implementation
+glmnet >= 4.1-0         # Ridge and Lasso regression
+
+# Optional but recommended
+ggplot2 >= 3.3.0        # Advanced plotting (included in tidyverse)
+dplyr >= 1.0.0          # Data manipulation (included in tidyverse)
+
+# R Version Requirement
+# R >= 4.0.0 (recommended)
+
+# Installation commands:
+# install.packages(c("tidyverse", "caret", "corrplot", "randomForest", "glmnet", "gridExtra"))
