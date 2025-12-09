@@ -1,0 +1,25 @@
+# R specific
+.Rhistory
+.RData
+.Rproj.user
+*.Rproj
+
+# Output files (optional - comment out if you want to track these)
+# output/
+# data/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*~
+
+# RStudio files
+.Rproj.user/
+
+# Package files
+*.tar.gz
+*.zip
