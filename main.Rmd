@@ -1,0 +1,60 @@
+---
+title: "Civil War Classification - Main"
+output: html_document
+---
+
+## Setup
+
+```{r setup, message=FALSE, warning=FALSE}
+set.seed(400)
+```
+
+## Data preprocessing
+
+```{r data-preprocessing}
+source("data_preprocessing.R")
+```
+
+## Logistic regression model
+
+```{r logistic}
+source("model_logistic.R")
+```
+
+## Unpruned decision tree
+
+```{r tree}
+source("model_tree.R")
+```
+
+## Pruned decision tree
+
+```{r pruned-tree}
+source("model_pruned_tree.R")
+```
+
+## Random forest
+
+```{r random-forest}
+source("model_random_forest.R")
+```
+
+## k-Nearest Neighbors (kNN)
+
+```{r knn}
+source("model_knn.R")
+```
+
+## XGBoost model
+
+```{r xgboost}
+source("model_xgboost.R")
+```
+
+## Model comparison
+
+```{r comparison}
+source("model_comparison.R")
+```
+
+
