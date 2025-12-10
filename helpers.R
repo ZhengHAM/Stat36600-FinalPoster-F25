@@ -40,7 +40,12 @@ load_data <- function() {
   list(train = train, test = test)
 }
 
-# ensure results directory exists for saving plots / outputs
+# ensure results directory exists for saving model output plots / tables
 ensure_results_dir <- function() {
   if (!dir.exists("results")) dir.create("results")
+}
+
+# ensure eda directory exists for saving exploratory plots
+ensure_eda_dir <- function() {
+  if (!dir.exists("EDA_vis")) dir.create("EDA_vis")
 }
