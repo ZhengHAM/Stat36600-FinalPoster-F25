@@ -1,4 +1,5 @@
-# model_logistic.r - logistic regression classifier
+
+# logistic regression classifier
 
 source("helpers.R")
 

@@ -1,4 +1,5 @@
-# model_knn.r - k-nearest neighbors classifier with k=5
+
+#  k-nearest neighbors classifier with k=5
 
 library(class)
 source("helpers.R")

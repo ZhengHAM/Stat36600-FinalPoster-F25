@@ -1,4 +1,4 @@
-# model_comparison.r - compare all models and generate summary
+# compare all models and generate summary
 
 # expects that the individual model scripts (model_logistic.R, model_tree.R, etc.)
 # have already been run in this R session (for example via main.Rmd or run_all.R),

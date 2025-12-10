@@ -1,4 +1,5 @@
-# model_pruned_tree.r - pruned decision tree classifier (cp from xerror min)
+
+# pruned decision tree classifier (cp from xerror min)
 
 library(rpart)
 source("helpers.R")

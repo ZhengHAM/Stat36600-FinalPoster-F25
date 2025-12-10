@@ -1,4 +1,5 @@
-# model_tree.r - unpruned decision tree classifier
+
+# unpruned decision tree classifier
 
 library(rpart)
 source("helpers.R")

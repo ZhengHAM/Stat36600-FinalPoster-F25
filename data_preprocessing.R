@@ -1,4 +1,5 @@
-# data_preprocessing.r - load civil war data, create 80/20 train-test split, save to data folder
+
+# load civil war data, create 80/20 train-test split, save to data folder
 
 # load data
 data <- read.csv("civilWar.csv")

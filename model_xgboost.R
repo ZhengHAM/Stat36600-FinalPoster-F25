@@ -1,4 +1,4 @@
-# model_xgboost.r - xgboost classifier with binary logistic
+# xgboost classifier with binary logistic
 
 library(xgboost)
 source("helpers.R")

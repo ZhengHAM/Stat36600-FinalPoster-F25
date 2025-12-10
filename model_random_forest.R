@@ -1,4 +1,4 @@
-# model_random_forest.r - random forest classifier
+# random forest classifier
 
 library(randomForest)
 source("helpers.R")

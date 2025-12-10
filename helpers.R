@@ -1,4 +1,3 @@
-# helpers.r - shared helper functions for all model scripts
 
 # roc/auc helper using trapezoidal rule and youden j
 compute_roc_auc <- function(probs, y_true) {
