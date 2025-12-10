@@ -28,7 +28,23 @@ dtrain <- xgb.DMatrix(data = train_xgb, label = y_train)
 
 # fit xgboost
 set.seed(408)
-xgb_model <- xgboost(data = dtrain, objective = "binary:logistic", nrounds = 100, verbose = 0)
+# weighted version (commented out for baseline comparison)
+# pos_weight <- sum(y_train == 0) / sum(y_train == 1)
+# # scale_pos_weight can improve performance on minority yes class
+# # motivated by class imbalance (~642 no vs 99 yes, ~13% yes)
+# xgb_model <- xgboost(
+#   data = dtrain,
+#   objective = "binary:logistic",
+#   nrounds = 100,
+#   verbose = 0,
+#   scale_pos_weight = pos_weight
+# )
+xgb_model <- xgboost(
+  data = dtrain,
+  objective = "binary:logistic",
+  nrounds = 100,
+  verbose = 0
+)
 cat("xgboost model trained with 100 rounds\n")
 
 # predict probabilities

@@ -13,6 +13,13 @@ y_test <- as.integer(test$civil.war == "YES")
 
 # fit random forest
 set.seed(408)
+# weighted version (commented out after comparison)
+# class_counts <- table(train$civil.war)
+# # class weights can improve performance on minority yes class
+# # motivated by class imbalance (~642 no vs 99 yes, ~13% yes)
+# yes_weight <- as.numeric(class_counts["NO"] / class_counts["YES"])
+# class_weights <- setNames(c(1, yes_weight), levels(train$civil.war))
+# rf_model <- randomForest(civil.war ~ ., data = train, classwt = class_weights)
 rf_model <- randomForest(civil.war ~ ., data = train)
 cat("random forest model:\n")
 print(rf_model)
