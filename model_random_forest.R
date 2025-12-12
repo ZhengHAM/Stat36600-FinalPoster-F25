@@ -12,7 +12,7 @@ test <- d$test
 y_test <- as.integer(test$civil.war == "YES")
 
 # fit random forest
-set.seed(408)
+set.seed(400)
 # weighted version (commented out after comparison)
 # class_counts <- table(train$civil.war)
 # # class weights can improve performance on minority yes class

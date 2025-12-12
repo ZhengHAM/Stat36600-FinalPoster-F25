@@ -51,6 +51,12 @@ source("model_knn.R")
 source("model_xgboost.R")
 ```
 
+## Best Subset
+
+```{r best_subset}
+source("best_subset.R")
+```
+
 ## Model comparison
 
 ```{r comparison}
