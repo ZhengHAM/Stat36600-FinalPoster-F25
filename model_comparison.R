@@ -219,3 +219,22 @@ barplot(
   xlab = "importance"
 )
 dev.off()
+
+cat("\nconfusion matrices (Youden J threshold):\n\n")
+
+confusion_list <- list(
+  best_subset = bss_confusion,
+  logistic = logit_confusion,
+  tree = tree_confusion,
+  pruned_tree = pruned_tree_confusion,
+  random_forest = rf_confusion,
+  knn = knn_confusion,
+  xgboost = xgb_confusion
+)
+
+for (m in names(confusion_list)) {
+  cat("model:", m, "\n")
+  print(confusion_list[[m]])
+  cat("\n")
+}
+
