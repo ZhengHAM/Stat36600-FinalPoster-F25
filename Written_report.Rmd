@@ -61,24 +61,40 @@ From the summary statistics, we observe the following key points:
 Overall, the dataset shows clean values, broad variability across predictors, and a relatively small number of civil war observations, all of which will influence model performance and threshold selection.
 
 ```{r}
-quant_vars <- df %>% select(exports, schooling, growth, concentration, lnpop, 
-  fractionalization)
+quant_vars <- df %>%
+  select(civil.war, exports, schooling, growth, concentration, lnpop,
+         fractionalization)
 
-# Converted dfor Faceting
+# Converted for faceting — EXCLUDE civil.war
 quant_long <- quant_vars %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "value")
-
-
+  pivot_longer(
+    cols = -civil.war,
+    names_to = "variable",
+    values_to = "value"
+  )
 ggplot(quant_long, aes(x = value)) +
-  geom_histogram(bins = 30, fill = "pink", color = "blue") +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 30,
+    fill = "pink",
+    color = "white"
+  ) +
+  geom_density(
+    aes(y = after_stat(density), color = civil.war),
+    linewidth = 1
+  ) +
   facet_wrap(~ variable, scales = "free", ncol = 3) +
-  labs(title = "Distribution of Quantitative Predictors",
-       x = "Value",
-       y = "Count")
-
+  labs(
+    title = "Distribution of Quantitative Predictors by Civil War Status",
+    x = "Value",
+    y = "Density",
+    color = "Civil War"
+  )
 table(df$civil.war)
 prop.table(table(df$civil.war))
+
 ```
+
 After plotting the variables, some, such as `exports` and `fractionalization`, exhibit strong right skew, indicating that a small subset of countries has unusually high values. Others, like `growth` and `lnpop`, are more symmetrically distributed. Concentration spans the full 0 to 1 range, reflecting large differences in how geographically centralized populations are. Together, these patterns suggest that nonlinear models may capture structure that simple linear boundaries cannot.
 
 One very important point to note is that the response variable, civil.war, is highly imbalanced: only 13.4% of observations correspond to ongoing civil war (99 `YES` vs. 642 `NO`). Because of this imbalance, classification accuracy alone would be misleading, and ROC/AUC will be used as the primary performance metric in later sections.

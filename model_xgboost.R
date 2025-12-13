@@ -27,7 +27,7 @@ test_xgb <- prep_matrix(test)
 dtrain <- xgb.DMatrix(data = train_xgb, label = y_train)
 
 # fit xgboost
-set.seed(408)
+set.seed(400)
 # weighted version (commented out for baseline comparison)
 # pos_weight <- sum(y_train == 0) / sum(y_train == 1)
 # # scale_pos_weight can improve performance on minority yes class

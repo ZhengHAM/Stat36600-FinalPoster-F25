@@ -2,6 +2,7 @@
 
 source("helpers.R")
 
+<<<<<<< HEAD
 # expects that the individual model scripts (model_logistic.R, model_tree.R, etc.)
 # have already been run in this R session (for example via main.Rmd),
 # so that objects like logit_roc, tree_roc, rf_roc, etc. are available.
@@ -35,66 +36,183 @@ results <- data.frame(
   MCR   = c(logit_mcr,     tree_mcr,     pruned_tree_mcr,     rf_mcr,     knn_mcr,     xgb_mcr),
   Brier = as.numeric(bs_vals[model_ids]),
   BSS   = as.numeric(bss_vals[model_ids])
+=======
+# create results dataframe
+results <- data.frame(
+  model = c(
+    "best_subset",
+    "logistic",
+    "tree",
+    "pruned_tree",
+    "random_forest",
+    "knn",
+    "xgboost"
+  ),
+  AUC = c(
+    bss_roc$auc,
+    logit_roc$auc,
+    tree_roc$auc,
+    pruned_tree_roc$auc,
+    rf_roc$auc,
+    knn_roc$auc,
+    xgb_roc$auc
+  ),
+  MCR = c(
+    bss_mcr,
+    logit_mcr,
+    tree_mcr,
+    pruned_tree_mcr,
+    rf_mcr,
+    knn_mcr,
+    xgb_mcr
+  )
+>>>>>>> 47a50b8c9ab328e6a14853c226e7dc65e1ff0f31
 )
 
+# rounded copy for display/output
+results_display <- results
+results_display$AUC <- round(results_display$AUC, 3)
+results_display$MCR <- round(results_display$MCR, 3)
+
 cat("model comparison:\n")
-print(results)
+print(results_display)
 
 # sort by auc
+<<<<<<< HEAD
 results_sorted <- results[order(results$AUC, decreasing = TRUE), ]
 results_sorted_print <- results_sorted
 results_sorted_print$AUC   <- round(results_sorted_print$AUC,   3)
 results_sorted_print$MCR   <- round(results_sorted_print$MCR,   3)
 results_sorted_print$Brier <- round(results_sorted_print$Brier, 3)
 results_sorted_print$BSS   <- round(results_sorted_print$BSS,   3)
+=======
+results_sorted <- results_display[
+  order(results_display$AUC, decreasing = TRUE),
+]
+>>>>>>> 47a50b8c9ab328e6a14853c226e7dc65e1ff0f31
 cat("\nsorted by auc (descending):\n")
 print(results_sorted_print)
 
 # best model
-best_idx <- which.max(results$AUC)
-best_model <- results$model[best_idx]
-cat("\nbest model by auc:", best_model, "\n")
-cat("best auc:", results$AUC[best_idx], "\n")
-cat("best mcr:", results$MCR[best_idx], "\n")
+best_idx <- which.max(results_sorted$AUC)
+cat("\nbest model by auc:", results_sorted$model[best_idx], "\n")
+cat("best auc:", results_sorted$AUC[best_idx], "\n")
+cat("best mcr:", results_sorted$MCR[best_idx], "\n")
 
-# all roc curves on one plot
+# all roc curves
 ensure_results_dir()
-colors <- c("black", "red", "blue", "forestgreen", "orange", "purple")
-png(file.path("results", "all_roc_curves.png"), width = 800, height = 600)
-plot(logit_roc$fpr, logit_roc$tpr, type = "l", col = colors[1],
-     main = "roc curves - all models", xlab = "fpr", ylab = "tpr")
-lines(tree_roc$fpr, tree_roc$tpr, col = colors[2])
-lines(pruned_tree_roc$fpr, pruned_tree_roc$tpr, col = colors[3])
-lines(rf_roc$fpr, rf_roc$tpr, col = colors[4])
-lines(knn_roc$fpr, knn_roc$tpr, col = colors[5])
-lines(xgb_roc$fpr, xgb_roc$tpr, col = colors[6])
+colors <- c(
+  "pink",
+  "black",
+  "red",
+  "blue",
+  "forestgreen",
+  "orange",
+  "purple"
+)
+
+png(
+  file.path("results", "all_roc_curves.png"),
+  width = 800,
+  height = 600
+)
+
+plot(
+  bss_roc$fpr,
+  bss_roc$tpr,
+  type = "l",
+  col = colors[1],
+  main = "roc curves - all models",
+  xlab = "fpr",
+  ylab = "tpr"
+)
+
+lines(logit_roc$fpr, logit_roc$tpr, col = colors[2])
+lines(tree_roc$fpr, tree_roc$tpr, col = colors[3])
+lines(pruned_tree_roc$fpr, pruned_tree_roc$tpr, col = colors[4])
+lines(rf_roc$fpr, rf_roc$tpr, col = colors[5])
+lines(knn_roc$fpr, knn_roc$tpr, col = colors[6])
+lines(xgb_roc$fpr, xgb_roc$tpr, col = colors[7])
 abline(0, 1, lty = 2, col = "gray")
-legend("bottomright",
-       legend = c("logistic", "tree", "pruned_tree", "random_forest", "knn", "xgboost"),
-       col = colors, lty = 1, cex = 0.8)
+
+legend(
+  "bottomright",
+  legend = c(
+    "best_subset",
+    "logistic",
+    "tree",
+    "pruned_tree",
+    "random_forest",
+    "knn",
+    "xgboost"
+  ),
+  col = colors,
+  lty = 1,
+  cex = 0.8
+)
+
 dev.off()
 cat("saved all_roc_curves.png\n")
 
-# optionally keep a single CSV summary (no RData clutter)
-write.csv(results_sorted, file.path("results", "model_comparison.csv"), row.names = FALSE)
+# save csv
+write.csv(
+  results_sorted,
+  file.path("results", "model_comparison.csv"),
+  row.names = FALSE
+)
 cat("saved model_comparison.csv\n")
 
-## additional visualization panels in EDA_vis/
+# additional diagnostics
 ensure_eda_dir()
 
+<<<<<<< HEAD
 # 06_model_performance_comparison.png (rmse and r2 using probabilities vs 0/1)
+=======
+d <- load_data()
+y_test_num <- as.integer(d$test$civil.war == "YES")
+
+>>>>>>> 47a50b8c9ab328e6a14853c226e7dc65e1ff0f31
 rmse <- function(y, yhat) sqrt(mean((y - yhat)^2))
-r2   <- function(y, yhat) 1 - sum((y - yhat)^2) / sum((y - mean(y))^2)
+r2 <- function(y, yhat) 1 - sum((y - yhat)^2) / sum((y - mean(y))^2)
 
+model_ids <- c(
+  "best_subset",
+  "logistic",
+  "tree",
+  "pruned_tree",
+  "random_forest",
+  "knn",
+  "xgboost"
+)
+
+<<<<<<< HEAD
+=======
+prob_list <- list(
+  best_subset = bss_probs,
+  logistic = logit_probs,
+  tree = tree_probs,
+  pruned_tree = pruned_tree_probs,
+  random_forest = rf_probs,
+  knn = knn_probs,
+  xgboost = xgb_probs
+)
+
+>>>>>>> 47a50b8c9ab328e6a14853c226e7dc65e1ff0f31
 rmse_vals <- sapply(prob_list, function(p) rmse(y_test_num, p))
-r2_vals   <- sapply(prob_list, function(p) r2(y_test_num, p))
+r2_vals <- sapply(prob_list, function(p) r2(y_test_num, p))
 
-png(file.path("EDA_vis", "06_model_performance_comparison.png"), width = 800, height = 400)
+png(
+  file.path("EDA_vis", "06_model_performance_comparison.png"),
+  width = 900,
+  height = 400
+)
+
 par(mfrow = c(1, 2))
 barplot(rmse_vals, names.arg = model_ids, main = "rmse", col = "gray", ylab = "rmse")
-barplot(r2_vals,   names.arg = model_ids, main = "r-squared", col = "gray", ylab = "r²")
+barplot(r2_vals, names.arg = model_ids, main = "r-squared", col = "gray", ylab = "r²")
 dev.off()
 
+<<<<<<< HEAD
 # 07_predicted_vs_actual.png - predicted probabilities by true class (boxplots)
 png(file.path("EDA_vis", "07_predicted_vs_actual.png"), width = 800, height = 800)
 par(mfrow = c(2, 3))
@@ -105,31 +223,83 @@ for (m in model_ids) {
           xlab = "actual class (0 = NO, 1 = YES)",
           ylab = "predicted prob yes",
           main = paste("predicted prob by class -", m))
+=======
+png(
+  file.path("EDA_vis", "07_predicted_vs_actual.png"),
+  width = 900,
+  height = 900
+)
+
+par(mfrow = c(3, 3))
+for (m in model_ids) {
+  p <- prob_list[[m]]
+  plot(
+    y_test_num,
+    p,
+    xlab = "actual (0/1)",
+    ylab = "predicted prob yes",
+    main = paste("predicted vs actual -", m)
+  )
+  abline(h = 0:1, col = "gray", lty = 3)
+>>>>>>> 47a50b8c9ab328e6a14853c226e7dc65e1ff0f31
 }
 dev.off()
 
-# 08_residual_analysis.png - residuals for each model
-png(file.path("EDA_vis", "08_residual_analysis.png"), width = 800, height = 800)
-par(mfrow = c(2, 3))
+png(
+  file.path("EDA_vis", "08_residual_analysis.png"),
+  width = 900,
+  height = 900
+)
+
+par(mfrow = c(3, 3))
 for (m in model_ids) {
   p <- prob_list[[m]]
   res <- y_test_num - p
-  plot(p, res,
-       xlab = "predicted prob yes", ylab = "residual",
-       main = paste("residuals -", m))
+  plot(
+    p,
+    res,
+    xlab = "predicted prob yes",
+    ylab = "residual",
+    main = paste("residuals -", m)
+  )
   abline(h = 0, col = "red", lwd = 2)
 }
 dev.off()
 
-# 09_feature_importance.png - random forest feature importance
-png(file.path("EDA_vis", "09_feature_importance.png"), width = 700, height = 500)
+png(
+  file.path("EDA_vis", "09_feature_importance.png"),
+  width = 700,
+  height = 500
+)
+
 imp <- importance(rf_model)
-imp_vals <- imp[, 1]
-imp_vals <- sort(imp_vals, decreasing = TRUE)
+imp_vals <- sort(imp[, 1], decreasing = TRUE)
+
 par(mar = c(5, 10, 4, 2))
-barplot(imp_vals,
-        horiz = TRUE,
-        las = 1,
-        main = "random forest feature importance",
-        xlab = "importance")
+barplot(
+  imp_vals,
+  horiz = TRUE,
+  las = 1,
+  main = "random forest feature importance",
+  xlab = "importance"
+)
 dev.off()
+
+cat("\nconfusion matrices (Youden J threshold):\n\n")
+
+confusion_list <- list(
+  best_subset = bss_confusion,
+  logistic = logit_confusion,
+  tree = tree_confusion,
+  pruned_tree = pruned_tree_confusion,
+  random_forest = rf_confusion,
+  knn = knn_confusion,
+  xgboost = xgb_confusion
+)
+
+for (m in names(confusion_list)) {
+  cat("model:", m, "\n")
+  print(confusion_list[[m]])
+  cat("\n")
+}
+
