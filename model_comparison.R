@@ -6,11 +6,35 @@ source("helpers.R")
 # have already been run in this R session (for example via main.Rmd),
 # so that objects like logit_roc, tree_roc, rf_roc, etc. are available.
 
+# load test labels once for all metrics
+d <- load_data()
+y_test_num <- as.integer(d$test$civil.war == "YES")
+
+# probability lists (per-model predicted prob of YES)
+model_ids <- c("logistic", "tree", "pruned_tree", "random_forest", "knn", "xgboost")
+prob_list <- list(
+  logistic      = logit_probs,
+  tree          = tree_probs,
+  pruned_tree   = pruned_tree_probs,
+  random_forest = rf_probs,
+  knn           = knn_probs,
+  xgboost       = xgb_probs
+)
+
+# brier score and brier skill score
+brier_score <- function(y, p) mean((p - y)^2)
+p_base <- mean(y_test_num)
+bs_base <- brier_score(y_test_num, rep(p_base, length(y_test_num)))
+bs_vals  <- sapply(prob_list, function(p) brier_score(y_test_num, p))
+bss_vals <- 1 - bs_vals / bs_base
+
 # create results dataframe from in-memory objects
 results <- data.frame(
-  model = c("logistic", "tree", "pruned_tree", "random_forest", "knn", "xgboost"),
+  model = model_ids,
   AUC   = c(logit_roc$auc, tree_roc$auc, pruned_tree_roc$auc, rf_roc$auc, knn_roc$auc, xgb_roc$auc),
-  MCR   = c(logit_mcr,     tree_mcr,     pruned_tree_mcr,     rf_mcr,     knn_mcr,     xgb_mcr)
+  MCR   = c(logit_mcr,     tree_mcr,     pruned_tree_mcr,     rf_mcr,     knn_mcr,     xgb_mcr),
+  Brier = as.numeric(bs_vals[model_ids]),
+  BSS   = as.numeric(bss_vals[model_ids])
 )
 
 cat("model comparison:\n")
@@ -18,8 +42,13 @@ print(results)
 
 # sort by auc
 results_sorted <- results[order(results$AUC, decreasing = TRUE), ]
+results_sorted_print <- results_sorted
+results_sorted_print$AUC   <- round(results_sorted_print$AUC,   3)
+results_sorted_print$MCR   <- round(results_sorted_print$MCR,   3)
+results_sorted_print$Brier <- round(results_sorted_print$Brier, 3)
+results_sorted_print$BSS   <- round(results_sorted_print$BSS,   3)
 cat("\nsorted by auc (descending):\n")
-print(results_sorted)
+print(results_sorted_print)
 
 # best model
 best_idx <- which.max(results$AUC)
@@ -54,21 +83,8 @@ cat("saved model_comparison.csv\n")
 ensure_eda_dir()
 
 # 06_model_performance_comparison.png (rmse and r2 using probabilities vs 0/1)
-d <- load_data()
-y_test_num <- as.integer(d$test$civil.war == "YES")
-
 rmse <- function(y, yhat) sqrt(mean((y - yhat)^2))
 r2   <- function(y, yhat) 1 - sum((y - yhat)^2) / sum((y - mean(y))^2)
-
-model_ids <- c("logistic", "tree", "pruned_tree", "random_forest", "knn", "xgboost")
-prob_list <- list(
-  logistic     = logit_probs,
-  tree         = tree_probs,
-  pruned_tree  = pruned_tree_probs,
-  random_forest= rf_probs,
-  knn          = knn_probs,
-  xgboost      = xgb_probs
-)
 
 rmse_vals <- sapply(prob_list, function(p) rmse(y_test_num, p))
 r2_vals   <- sapply(prob_list, function(p) r2(y_test_num, p))
@@ -79,15 +95,16 @@ barplot(rmse_vals, names.arg = model_ids, main = "rmse", col = "gray", ylab = "r
 barplot(r2_vals,   names.arg = model_ids, main = "r-squared", col = "gray", ylab = "r²")
 dev.off()
 
-# 07_predicted_vs_actual.png - predicted vs actual for each model
+# 07_predicted_vs_actual.png - predicted probabilities by true class (boxplots)
 png(file.path("EDA_vis", "07_predicted_vs_actual.png"), width = 800, height = 800)
 par(mfrow = c(2, 3))
 for (m in model_ids) {
   p <- prob_list[[m]]
-  plot(y_test_num, p,
-       xlab = "actual (0/1)", ylab = "predicted prob yes",
-       main = paste("predicted vs actual -", m))
-  abline(h = 0:1, col = "gray", lty = 3)
+  boxplot(p ~ y_test_num,
+          names = c("0", "1"),
+          xlab = "actual class (0 = NO, 1 = YES)",
+          ylab = "predicted prob yes",
+          main = paste("predicted prob by class -", m))
 }
 dev.off()
 
